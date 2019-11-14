@@ -17,4 +17,4 @@ constraint forall (i in 1..n_prefs) (
 
 solve maximize(score);
 
-output["Sum ", show(score)]
+output["Result: ", show(score)]
