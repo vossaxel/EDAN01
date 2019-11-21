@@ -192,7 +192,6 @@ public class SendMoreMoney  {
 	 * We create auxilary variables in order to make it easier to express some of the
 	 * constraints. Each auxilary variable holds a value for a given word.
 	 */
-
 	IntVar valueSEND = new IntVar(store, "v(SEND)", 0, 9999);
 	IntVar valueMORE = new IntVar(store, "v(MORE)", 0, 9999);
 	IntVar valueMONEY = new IntVar(store, "v(MONEY)", 0, 99999);
@@ -203,7 +202,6 @@ public class SendMoreMoney  {
 	 * MORE = 1000 * M + 100 * O + R * 10 + E * 1
 	 * MONEY = 10000 * M + 1000 * O + 100 * N + E * 10 + Y * 1
 	 */
-	 
 	store.impose(new SumWeight(send, weights4, valueSEND));
 	store.impose(new SumWeight(more, weights4, valueMORE));
 	store.impose(new SumWeight(money, weights5, valueMONEY));
