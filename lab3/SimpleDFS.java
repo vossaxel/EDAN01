@@ -50,6 +50,7 @@ public class SimpleDFS  {
 
   boolean trace = false;
 
+  int nodeCount, wrongCount;
   /**
    * Store used in search
    */
@@ -108,9 +109,11 @@ public class SimpleDFS  {
     }
 
     consistent = store.consistency();
+    nodeCount++;
 
     if (!consistent) {
       // Failed leaf of the search tree
+      wrongCount++;
       return false;
     } else { // consistent
 
@@ -178,6 +181,9 @@ public class SimpleDFS  {
   public void reportSolution() {
     if (costVariable != null)
       System.out.println ("Cost is " + costVariable);
+
+    System.out.println ("NodeCount is " + nodeCount);
+    System.out.println ("WrongCount is " + WrongCount);
 
     for (int i = 0; i < variablesToReport.length; i++) 
       System.out.print (variablesToReport[i] + " ");
