@@ -74,7 +74,7 @@ public class Golomb {
      * It specifies the number of marks (number of natural numbers in 
      * the sequence).
      */
-    public int noMarks = 8;
+    public int noMarks = 10;
 
     /**
      * It specifies the upper bound of the optimal solution.

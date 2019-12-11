@@ -129,8 +129,7 @@ public class SimpleDFS  {
         return costVariable == null; // true is satisfiability search and false if minimization
       }
 
-      choice = new ChoicePoint(vars);
-      choice.select = 1;
+      choice = new ChoicePoint(vars, 2, false);
 
       levelUp();
 
@@ -183,7 +182,7 @@ public class SimpleDFS  {
       System.out.println ("Cost is " + costVariable);
 
     System.out.println ("NodeCount is " + nodeCount);
-    System.out.println ("WrongCount is " + WrongCount);
+    System.out.println ("WrongCount is " + wrongCount);
 
     for (int i = 0; i < variablesToReport.length; i++) 
       System.out.print (variablesToReport[i] + " ");
@@ -203,9 +202,12 @@ public class SimpleDFS  {
     IntVar var;
     IntVar[] searchVariables;
     int value;
-    int select = 0;
+    int select;
+    boolean ff;
 
-    public ChoicePoint (IntVar[] v) {
+    public ChoicePoint (IntVar[] v, int select, boolean ff) {
+      this.select = select;
+      this.ff = ff;
       var = selectVariable(v);
       value = selectValue(var);
     }
@@ -219,31 +221,45 @@ public class SimpleDFS  {
      */ 
     IntVar selectVariable(IntVar[] v) {
       if (v.length != 0) {
+        int index = 0;
+        if(ff){
+          int min_domain = Integer.MAX_VALUE;
+          for(int i = 0; i < v.length; i++){
+            if(v[i].getSize() < min_domain){
+              index = i;
+              min_domain = v[i].getSize();
+            }
+          }
+        }
         switch(select){
           case 1:
-            if(v[0].min() ==  v[0].max()){
+            if(v[index].min() ==  v[index].max()){
               searchVariables = new IntVar[v.length-1];
-              for (int i = 0; i < v.length-1; i++) {
+              for (int i = 0; i < index; i++) {
+                searchVariables[i] = v[i]; 
+              }
+              for (int i = index; i < v.length-1; i++) {
                 searchVariables[i] = v[i+1]; 
               }
-              return v[0];
             }
             else {
               searchVariables = v;
-              return v[0];
             }
+            return v[index];
           case 2:
-            if(v[0].min() ==  v[0].max()){
+            if(v[index].min() ==  v[index].max()){
               searchVariables = new IntVar[v.length-1];
-              for (int i = 0; i < v.length-1; i++) {
+              for (int i = 0; i < index; i++) {
+                searchVariables[i] = v[i]; 
+              }
+              for (int i = index; i < v.length-1; i++) {
                 searchVariables[i] = v[i+1]; 
               }
-              return v[0];
             }
             else {
               searchVariables = v;
-              return v[0];
             }
+            return v[index];
           default:
             searchVariables = new IntVar[v.length-1];
             for (int i = 0; i < v.length-1; i++) {
@@ -266,7 +282,7 @@ public class SimpleDFS  {
         case 1:
           return (v.min() + v.max())/2;
         case 2:
-          return (v.min() + v.max())/2;
+          return (v.min() + v.max())%2==0 ? (v.min() + v.max())/2 : (v.min() + v.max()+1)/2;
         default:
           return v.min();
       }
