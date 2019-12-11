@@ -32,6 +32,8 @@
 import org.jacop.constraints.Not;
 import org.jacop.constraints.PrimitiveConstraint;
 import org.jacop.constraints.XeqC;
+import org.jacop.constraints.XlteqC;
+import org.jacop.constraints.XgteqC;
 import org.jacop.core.FailException;
 import org.jacop.core.IntDomain;
 import org.jacop.core.IntVar;
@@ -125,6 +127,7 @@ public class SimpleDFS  {
       }
 
       choice = new ChoicePoint(vars);
+      choice.select = 1;
 
       levelUp();
 
