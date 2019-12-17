@@ -1,25 +1,13 @@
+include "globals.mzn";
 int : n;
 int : n_commercial;
 int : n_residential;
-array[1..n] of int : point_distribution;
+array[0..n] of int : point_distribution;
+array[1..n, 1..n] of var 0..1: grid;
+array[1..2, 1..n] of var int: cost;
 
-var int: score;
-array[1..n][1..n] of var int 0..1: grid;
-array[1..2][1..n] of var int: residents;
-array[1..2][1..n] of var int: cost;
-
-constraint sum(residents[1], n_residential);
-constraint sum(residents[2], n_residential);
-
-constraint forall(j in 1..n)(
-  residents[1] = count(row(grid, i), 1)
-  residents[2] = count(col(grid, i), 1)
-);
-
-constraint forall(i,j in cost)(
-  element(residents[i][j], point_distribution, cost[i][j])
-);
-
-constraint score = sum(cost[1]) + sum(cost[2]);
-
-solve maximize score
+constraint sum(i in 1..n, j in 1..n)(grid[i,j]) = n_residential;
+constraint forall(i in 1..n)(element(sum(col(grid, i)), point_distribution, cost[1,i]) /\ element(sum(row(grid, i)), point_distribution, cost[2,i]));
+constraint lex2(grid);
+solve maximize sum(i in 1..2, j in 1..n)(cost[i,j]);
+output[show(sum(i in 1..2, j in 1..n)(cost[i,j]))];
